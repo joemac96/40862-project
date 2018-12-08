@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/40862-Simulator.iml" filepath="$PROJECT_DIR$/40862-Simulator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ButtonJoyInterface.iml" filepath="$PROJECT_DIR$/ButtonJoyInterface.iml" />
     </modules>
   </component>
 </project>
