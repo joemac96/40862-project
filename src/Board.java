@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class Board extends JPanel implements Commons, Runnable {
@@ -9,7 +8,6 @@ public class Board extends JPanel implements Commons, Runnable {
     private ArrayList<Button> buttons;
     private ArrayList<Switch> switches;
     private Joystick joystick;
-    private boolean buttonPressed = false;
     private Dimension d;
 
     public Board() {
@@ -19,10 +17,12 @@ public class Board extends JPanel implements Commons, Runnable {
     private void initBoard() {
         d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
         addKeyListener(new TAdapter());
+        addMouseMotionListener(new MAdapter());
         setFocusable(true);
         setBackground(Color.black);
         initButtons();
         initSwitches();
+        initJoystick();
     }
 
     private void initButtons() {
@@ -41,10 +41,16 @@ public class Board extends JPanel implements Commons, Runnable {
         }
     }
 
+    private void initJoystick() {
+        joystick = new Joystick();
+    }
+
     private void drawObjects(Graphics g) {
         drawButtons(g);
         drawSwitches(g);
+        drawJoystick(g);
     }
+
     private void drawButtons(Graphics g) {
         for (Button button : buttons) {
             g.setColor(button.getColor());
@@ -61,6 +67,10 @@ public class Board extends JPanel implements Commons, Runnable {
             g.setColor(down.getColor());
             g.fillRect(down.getX(), down.getY(), SWITCH_WIDTH, SWITCH_HEIGHT);
         }
+    }
+
+    private void drawJoystick(Graphics g) {
+        g.fillOval(joystick.getBaseX(), joystick.getBaseY(), JOY_BASE_WIDTH, JOY_BASE_HEIGHT);
     }
 
     private void updateButton(int id, boolean io) {
@@ -104,6 +114,7 @@ public class Board extends JPanel implements Commons, Runnable {
             repaint();
         }
     }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -111,11 +122,14 @@ public class Board extends JPanel implements Commons, Runnable {
         g.setColor(Color.black);
         g.fillRect(0, 0, d.width, d.height);
 
+        g.setColor(Color.blue);
+        g.drawLine(0, BOARD_HEIGHT / 2, BOARD_WIDTH, BOARD_HEIGHT / 2);
         drawObjects(g);
 
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
     }
+
     private class TAdapter extends KeyAdapter {
 
         @Override
@@ -201,6 +215,13 @@ public class Board extends JPanel implements Commons, Runnable {
                     updateSwitch(3, 'D', false);
                     break;
             }
+        }
+    }
+
+    private class MAdapter extends MouseMotionAdapter {
+        @Override
+        public void mouseMoved(MouseEvent e) {
+            System.out.println(e.getLocationOnScreen());
         }
     }
 }
