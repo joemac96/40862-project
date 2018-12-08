@@ -8,4 +8,6 @@ public interface Commons {
     int BUTTON_HEIGHT = 50;
     int JOY_BASE_WIDTH = 200;
     int JOY_BASE_HEIGHT = 200;
+    int JOY_STICK_WIDTH = 50;
+    int JOY_STICK_HEIGHT = 50;
 }

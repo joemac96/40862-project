@@ -9,6 +9,7 @@ public class Board extends JPanel implements Commons, Runnable {
     private ArrayList<Switch> switches;
     private Joystick joystick;
     private Dimension d;
+    private Point origin;
 
     public Board() {
         initBoard();
@@ -23,6 +24,7 @@ public class Board extends JPanel implements Commons, Runnable {
         initButtons();
         initSwitches();
         initJoystick();
+        origin = new Point(joystick.getBaseX(), joystick.getBaseY());
     }
 
     private void initButtons() {
@@ -70,7 +72,10 @@ public class Board extends JPanel implements Commons, Runnable {
     }
 
     private void drawJoystick(Graphics g) {
+        g.setColor(Color.white);
         g.fillOval(joystick.getBaseX(), joystick.getBaseY(), JOY_BASE_WIDTH, JOY_BASE_HEIGHT);
+        g.setColor(Color.red);
+        g.fillOval(joystick.getJoyX(), joystick.getJoyY(), JOY_STICK_WIDTH, JOY_STICK_HEIGHT);
     }
 
     private void updateButton(int id, boolean io) {
@@ -221,7 +226,11 @@ public class Board extends JPanel implements Commons, Runnable {
     private class MAdapter extends MouseMotionAdapter {
         @Override
         public void mouseMoved(MouseEvent e) {
-            System.out.println(e.getLocationOnScreen());
+            joystick.setJoyDX(e.getPoint().x - origin.x);
+            joystick.setJoyDY(e.getPoint().y - origin.y);
+            origin = e.getPoint();
+            joystick.move();
+            repaint();
         }
     }
 }
