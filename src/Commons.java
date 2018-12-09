@@ -10,4 +10,5 @@ public interface Commons {
     int JOY_BASE_HEIGHT = 200;
     int JOY_STICK_WIDTH = 50;
     int JOY_STICK_HEIGHT = 50;
+    int DELAY = 17;
 }

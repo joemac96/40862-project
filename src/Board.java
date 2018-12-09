@@ -21,6 +21,10 @@ public class Board extends JPanel implements Commons, Runnable {
         addMouseMotionListener(new MAdapter());
         setFocusable(true);
         setBackground(Color.black);
+        initGame();
+    }
+
+    private void initGame() {
         initButtons();
         initSwitches();
         initJoystick();
@@ -113,10 +117,37 @@ public class Board extends JPanel implements Commons, Runnable {
     }
 
     @Override
+    public void addNotify() {
+
+        super.addNotify();
+        initGame();
+    }
+
+    @Override
     public void run() {
 
-        while(true) {
+        long beforeTime, timeDiff, sleep;
+
+        beforeTime = System.currentTimeMillis();
+
+        while (true) {
+
             repaint();
+            joystick.move();
+            timeDiff = System.currentTimeMillis() - beforeTime;
+            sleep = DELAY - timeDiff;
+
+            if (sleep < 0) {
+                sleep = 2;
+            }
+
+            try {
+                Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+                System.out.println("interrupted");
+            }
+
+            beforeTime = System.currentTimeMillis();
         }
     }
 
@@ -232,11 +263,11 @@ public class Board extends JPanel implements Commons, Runnable {
             {
                 if ((Math.abs(e.getPoint().x - origin.x)) <= (JOY_BASE_WIDTH / 2))
                 {
-                    xSpeed = (e.getPoint().x - origin.x) / 10;
+                    xSpeed = e.getPoint().x - joystick.getJoyX();
                 }
                 if (Math.abs(e.getPoint().y - origin.y) <= (JOY_BASE_HEIGHT / 2))
                 {
-                    ySpeed = (e.getPoint().y - origin.y) / 10;
+                    ySpeed = e.getPoint().y - joystick.getJoyY();
                 }
             }
             else
@@ -245,8 +276,8 @@ public class Board extends JPanel implements Commons, Runnable {
             }
             joystick.setJoyDX(xSpeed);
             joystick.setJoyDY(ySpeed);
-            joystick.move();
             repaint();
+            joystick.move();
         }
     }
 }

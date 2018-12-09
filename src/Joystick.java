@@ -47,6 +47,14 @@ public class Joystick implements Commons{
         this.joyDY = joyDY;
     }
 
+    public void setJoyX(int x) {
+        joyX = x;
+    }
+
+    public void setJoyY(int y) {
+        joyY = y;
+    }
+
     public void move() {
         joyX += joyDX;
         joyY += joyDY;
