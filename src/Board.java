@@ -24,7 +24,7 @@ public class Board extends JPanel implements Commons, Runnable {
         initButtons();
         initSwitches();
         initJoystick();
-        origin = new Point(joystick.getBaseX(), joystick.getBaseY());
+        origin = new Point(joystick.getBaseX() + (JOY_BASE_WIDTH / 2), joystick.getBaseY() + (JOY_BASE_HEIGHT / 2));
     }
 
     private void initButtons() {
@@ -226,9 +226,25 @@ public class Board extends JPanel implements Commons, Runnable {
     private class MAdapter extends MouseMotionAdapter {
         @Override
         public void mouseMoved(MouseEvent e) {
-            joystick.setJoyDX(e.getPoint().x - origin.x);
-            joystick.setJoyDY(e.getPoint().y - origin.y);
-            origin = e.getPoint();
+            int xSpeed = 0;
+            int ySpeed = 0;
+            if ((Math.abs(e.getPoint().x - origin.x) > 10) || (Math.abs(e.getPoint().y - origin.y) > 10))
+            {
+                if ((Math.abs(e.getPoint().x - origin.x)) <= (JOY_BASE_WIDTH / 2))
+                {
+                    xSpeed = (e.getPoint().x - origin.x) / 10;
+                }
+                if (Math.abs(e.getPoint().y - origin.y) <= (JOY_BASE_HEIGHT / 2))
+                {
+                    ySpeed = (e.getPoint().y - origin.y) / 10;
+                }
+            }
+            else
+            {
+                joystick.reset();
+            }
+            joystick.setJoyDX(xSpeed);
+            joystick.setJoyDY(ySpeed);
             joystick.move();
             repaint();
         }

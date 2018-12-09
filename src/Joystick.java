@@ -68,4 +68,9 @@ public class Joystick implements Commons{
         }
     }
 
+    public void reset() {
+        joyX = (BOARD_WIDTH / 2) + (BOARD_WIDTH / 4) - (JOY_STICK_WIDTH / 2);
+        joyY = (BOARD_HEIGHT / 2) - (JOY_STICK_HEIGHT / 2);
+    }
+
 }
