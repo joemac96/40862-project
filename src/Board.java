@@ -18,7 +18,6 @@ public class Board extends JPanel implements Commons, Runnable {
     private void initBoard() {
         d = new Dimension(BOARD_WIDTH, BOARD_HEIGHT);
         addKeyListener(new TAdapter());
-        addMouseMotionListener(new MAdapter());
         setFocusable(true);
         setBackground(Color.black);
         initGame();
@@ -48,7 +47,7 @@ public class Board extends JPanel implements Commons, Runnable {
     }
 
     private void initJoystick() {
-        joystick = new Joystick();
+        joystick = new Joystick(this);
     }
 
     private void drawObjects(Graphics g) {
@@ -116,12 +115,12 @@ public class Board extends JPanel implements Commons, Runnable {
         repaint();
     }
 
-    @Override
-    public void addNotify() {
-
-        super.addNotify();
-        initGame();
-    }
+//    @Override
+//    public void addNotify() {
+//
+//        super.addNotify();
+//        initGame();
+//    }
 
     @Override
     public void run() {
@@ -133,7 +132,6 @@ public class Board extends JPanel implements Commons, Runnable {
         while (true) {
 
             repaint();
-            joystick.move();
             timeDiff = System.currentTimeMillis() - beforeTime;
             sleep = DELAY - timeDiff;
 
@@ -251,33 +249,6 @@ public class Board extends JPanel implements Commons, Runnable {
                     updateSwitch(3, 'D', false);
                     break;
             }
-        }
-    }
-
-    private class MAdapter extends MouseMotionAdapter {
-        @Override
-        public void mouseMoved(MouseEvent e) {
-            int xSpeed = 0;
-            int ySpeed = 0;
-            if ((Math.abs(e.getPoint().x - origin.x) > 10) || (Math.abs(e.getPoint().y - origin.y) > 10))
-            {
-                if ((Math.abs(e.getPoint().x - origin.x)) <= (JOY_BASE_WIDTH / 2))
-                {
-                    xSpeed = e.getPoint().x - joystick.getJoyX();
-                }
-                if (Math.abs(e.getPoint().y - origin.y) <= (JOY_BASE_HEIGHT / 2))
-                {
-                    ySpeed = e.getPoint().y - joystick.getJoyY();
-                }
-            }
-            else
-            {
-                joystick.reset();
-            }
-            joystick.setJoyDX(xSpeed);
-            joystick.setJoyDY(ySpeed);
-            repaint();
-            joystick.move();
         }
     }
 }
